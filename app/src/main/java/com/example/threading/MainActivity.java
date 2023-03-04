@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button start, stop, clear;
     ImageView yellow, green, red;
-    TextView Indicator;
+    TextView Indicator, redImg, greenImg, yellowImg;
     private volatile boolean stopThreadflag = false;
     private Handler mainHandler = new Handler();
 
@@ -31,9 +31,15 @@ public class MainActivity extends AppCompatActivity {
         green = findViewById(R.id.imgRed);
         red = findViewById(R.id.imgRed);
         Indicator = findViewById(R.id.indicator);
+        redImg = findViewById(R.id.redImg);
+        greenImg = findViewById(R.id.redImg);
+        yellowImg = findViewById(R.id.yellowImg);
         green.setVisibility(View.GONE);
         yellow.setVisibility(View.GONE);
         red.setVisibility(View.GONE);
+        redImg.setVisibility(View.GONE);
+        greenImg.setVisibility(View.GONE);
+        yellowImg.setVisibility(View.GONE);
         clear = findViewById(R.id.clrButton);
 
         clear.setOnClickListener(new View.OnClickListener() {
@@ -91,20 +97,20 @@ public class MainActivity extends AppCompatActivity {
                 if(i == 3){
                     mainHandler.post(() -> {
                         red.setVisibility(View.VISIBLE);
-                        Indicator.setText("STOP!");
+                        redImg.setVisibility(View.VISIBLE);
                     });
                 }
 
                 if(i == 6){
                     mainHandler.post(() -> {
                         yellow.setVisibility(View.VISIBLE);
-                        Indicator.setText("Faster!");
+                        yellowImg.setVisibility(View.VISIBLE);
                     });
 
                 if(i == 9){
                     mainHandler.post(() -> {
                         green.setVisibility(View.VISIBLE);
-                        Indicator.setText("GO!");
+                        greenImg.setVisibility(View.VISIBLE);
                     });
                 }
                 Log.d("THREAD ACTIVITY", "START THREAD: " + i);
