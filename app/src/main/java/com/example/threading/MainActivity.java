@@ -1,6 +1,8 @@
 package com.example.threading;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,10 +17,9 @@ import kotlinx.coroutines.internal.ThreadSafeHeap;
 public class MainActivity extends AppCompatActivity {
 
     Button start, stop, clear;
-    ImageView yellow, green, red;
-    TextView Indicator, redImg, greenImg, yellowImg;
+    TextView Indicator;
     private volatile boolean stopThreadflag = false;
-    private Handler mainHandler = new Handler();
+    private final Handler mainHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,27 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         start = findViewById(R.id.startButton);
         stop = findViewById(R.id.stopButton);
-        yellow = findViewById(R.id.imgYellow);
-        green = findViewById(R.id.imgRed);
-        red = findViewById(R.id.imgRed);
         Indicator = findViewById(R.id.indicator);
-        redImg = findViewById(R.id.redImg);
-        greenImg = findViewById(R.id.redImg);
-        yellowImg = findViewById(R.id.yellowImg);
-        green.setVisibility(View.GONE);
-        yellow.setVisibility(View.GONE);
-        red.setVisibility(View.GONE);
-        redImg.setVisibility(View.GONE);
-        greenImg.setVisibility(View.GONE);
-        yellowImg.setVisibility(View.GONE);
         clear = findViewById(R.id.clrButton);
 
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                green.setVisibility(View.GONE);
-                yellow.setVisibility(View.GONE);
-                red.setVisibility(View.GONE);
+                Indicator.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -70,12 +57,11 @@ public class MainActivity extends AppCompatActivity {
     public void startThread(int sec){
         TrafficRunnable runnable = new TrafficRunnable(10);
         new Thread(runnable).start();
-        green.setVisibility(View.GONE);
-        yellow.setVisibility(View.GONE);
-        red.setVisibility(View.GONE);
+            Indicator.setVisibility(View.VISIBLE);
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void stopThread(){
         stopThreadflag=true;
         Indicator.setText("Traffic Light Jammed");
@@ -94,23 +80,20 @@ public class MainActivity extends AppCompatActivity {
                 if(stopThreadflag){
                     return;
                 }
-                if(i == 3){
+                else if(i == 3){
                     mainHandler.post(() -> {
-                        red.setVisibility(View.VISIBLE);
-                        redImg.setVisibility(View.VISIBLE);
+                        Indicator.setText("STOP!");
                     });
                 }
 
-                if(i == 6){
+                else if(i == 6) {
                     mainHandler.post(() -> {
-                        yellow.setVisibility(View.VISIBLE);
-                        yellowImg.setVisibility(View.VISIBLE);
+                        Indicator.setText("GO!");
                     });
-
-                if(i == 9){
+                }
+                else if(i == 9){
                     mainHandler.post(() -> {
-                        green.setVisibility(View.VISIBLE);
-                        greenImg.setVisibility(View.VISIBLE);
+                        Indicator.setText("FASTER!");
                     });
                 }
                 Log.d("THREAD ACTIVITY", "START THREAD: " + i);
@@ -124,4 +107,3 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-}
